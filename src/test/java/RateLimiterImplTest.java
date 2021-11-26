@@ -37,7 +37,7 @@ class RateLimiterImplTest {
                 .forEach(i -> rateLimiter.runWithRateLimit(counter::incrementAndGet));
 
         long t2 = nanoTime();
-        assertTrue(2 * 5 * ceil((t2 - t1) / 1000 / 1000000.0) >  counter.get());
+        assertTrue(2 * 5 * ceil((t2 - t1) / 1000 / 1000000.0) >= counter.get());
     }
 
 }
