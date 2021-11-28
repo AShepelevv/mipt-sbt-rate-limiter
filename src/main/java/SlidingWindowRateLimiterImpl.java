@@ -43,7 +43,7 @@ public class SlidingWindowRateLimiterImpl implements RateLimiter {
                 hasFreePosition(timestamp);
     }
 
-    private boolean hasFreePosition(long timestamp) { //Complexity: O(maxExecutions * log(maxExecutions * timeout / interval))
+    private boolean hasFreePosition(long timestamp) { //Complexity: O(maxExecutions + log(maxExecutions * timeout / interval))
         return runningLog
                 .tailSet(timestamp - intervalNanos)
                 .headSet(timestamp + intervalNanos)
