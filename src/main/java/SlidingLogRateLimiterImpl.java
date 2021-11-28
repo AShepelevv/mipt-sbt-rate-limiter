@@ -3,15 +3,15 @@ import java.util.concurrent.ConcurrentSkipListSet;
 
 import static java.lang.System.nanoTime;
 
-public class SlidingWindowRateLimiterImpl implements RateLimiter {
+public class SlidingLogRateLimiterImpl implements RateLimiter {
     private final long maxExecutions;
     private final long intervalNanos;
     private final long timeoutNanos;
     private final ConcurrentSkipListSet<Long> runningLog = new ConcurrentSkipListSet<>();
 
-    public SlidingWindowRateLimiterImpl(long maxExecutions, Duration slidingWindowInterval, Duration timeout) {
+    public SlidingLogRateLimiterImpl(long maxExecutions, Duration slidingInterval, Duration timeout) {
         this.maxExecutions = maxExecutions;
-        this.intervalNanos = slidingWindowInterval.toNanos();
+        this.intervalNanos = slidingInterval.toNanos();
         this.timeoutNanos = timeout.toNanos();
     }
 

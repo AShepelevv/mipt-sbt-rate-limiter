@@ -11,11 +11,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.data.Percentage.withPercentage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class SlidingWindowRateLimiterImplTest {
+class SlidingLogRateLimiterImplTest {
 
     @Test
     void testSequential() throws InterruptedException {
-        RateLimiter rateLimiter = new SlidingWindowRateLimiterImpl(5, ofSeconds(1), ofSeconds(10));
+        RateLimiter rateLimiter = new SlidingLogRateLimiterImpl(5, ofSeconds(1), ofSeconds(10));
         AtomicInteger counter = new AtomicInteger();
 
         range(0, 10)
@@ -32,7 +32,7 @@ class SlidingWindowRateLimiterImplTest {
     @Test
     void testParallel() {
         long t1 = nanoTime();
-        RateLimiter rateLimiter = new SlidingWindowRateLimiterImpl(5, ofSeconds(1), ofSeconds(10));
+        RateLimiter rateLimiter = new SlidingLogRateLimiterImpl(5, ofSeconds(1), ofSeconds(10));
         AtomicInteger counter = new AtomicInteger();
 
         range(0, 1000000000).parallel()
@@ -46,7 +46,7 @@ class SlidingWindowRateLimiterImplTest {
 
     @Test
     void testTimeout() {
-        RateLimiter rateLimiter = new SlidingWindowRateLimiterImpl(5, ofSeconds(1), Duration.ZERO);
+        RateLimiter rateLimiter = new SlidingLogRateLimiterImpl(5, ofSeconds(1), Duration.ZERO);
         AtomicInteger counter = new AtomicInteger();
 
         range(0, 1000000000).parallel()
