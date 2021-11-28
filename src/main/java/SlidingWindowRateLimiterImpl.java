@@ -2,8 +2,6 @@ import java.time.Duration;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 import static java.lang.System.nanoTime;
-import static java.util.stream.Collectors.toUnmodifiableSet;
-import static java.util.stream.LongStream.range;
 
 public class SlidingWindowRateLimiterImpl implements RateLimiter {
     private final long maxExecutions;
@@ -15,9 +13,11 @@ public class SlidingWindowRateLimiterImpl implements RateLimiter {
         this.maxExecutions = maxExecutions;
         this.intervalNanos = slidingWindowInterval.toNanos();
         this.timeoutNanos = timeout.toNanos();
-        warmUp();
     }
 
+    private static long microsecondsNow() {
+        return nanoTime();
+    }
 
     @Override
     public boolean runWithRateLimit(Runnable target) {
@@ -53,14 +53,5 @@ public class SlidingWindowRateLimiterImpl implements RateLimiter {
     private void cleanUp() {
         long timeNow = microsecondsNow();
         runningLog.removeIf(val -> val < timeNow - timeoutNanos);
-    }
-
-    private void warmUp() {
-        long timestamp = microsecondsNow() - intervalNanos;
-        runningLog.addAll(range(0, maxExecutions).mapToObj(i -> timestamp + i).collect(toUnmodifiableSet()));
-    }
-
-    private static long microsecondsNow() {
-        return nanoTime();
     }
 }

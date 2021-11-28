@@ -1,21 +1,15 @@
-import org.assertj.core.api.Assertions;
-import org.assertj.core.data.Percentage;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.IntStream;
 
 import static java.lang.Math.ceil;
 import static java.lang.System.nanoTime;
 import static java.time.Duration.ofSeconds;
-import static java.util.concurrent.TimeUnit.SECONDS;
 import static java.util.stream.IntStream.range;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.data.Percentage.withPercentage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class SlidingWindowRateLimiterImplTest {
 
@@ -25,7 +19,7 @@ class SlidingWindowRateLimiterImplTest {
         AtomicInteger counter = new AtomicInteger();
 
         range(0, 10)
-            .forEach(i -> rateLimiter.runWithRateLimit(counter::incrementAndGet));
+                .forEach(i -> rateLimiter.runWithRateLimit(counter::incrementAndGet));
         assertEquals(5, counter.get());
 
         Thread.sleep(1000);
@@ -44,7 +38,7 @@ class SlidingWindowRateLimiterImplTest {
         range(0, 1000000000).parallel()
                 .forEach(i -> rateLimiter.runWithRateLimit(counter::incrementAndGet));
 
-        int expectedCalls = (int)(5 * ceil((nanoTime() - t1) / 1000 / 1000000.0));
+        int expectedCalls = (int) (5 * ceil((nanoTime() - t1) / 1000 / 1000000.0));
         assertThat(counter.get())
                 .isLessThanOrEqualTo(expectedCalls)
                 .isCloseTo(expectedCalls, withPercentage(10));
